@@ -6,7 +6,9 @@ interface SearchBarProps {
 }
 
 export default function SearchBar({ onSubmit }: SearchBarProps) {
-  const handleSubmit = (query: string) => {
+  const handleFormSubmit = async (formData: FormData) => {
+    const query = formData.get("query") as string;
+
     if (!query) {
       toast.error("Please enter your search query.");
       return;
@@ -26,17 +28,7 @@ export default function SearchBar({ onSubmit }: SearchBarProps) {
         >
           Powered by TMDB
         </a>
-        <form
-          className={styles.form}
-          action="#"
-          onSubmit={(e) => {
-            e.preventDefault();
-            const formData = new FormData(e.currentTarget);
-            const query = formData.get("query") as string;
-            handleSubmit(query);
-            e.currentTarget.reset();
-          }}
-        >
+        <form className={styles.form} action={handleFormSubmit}>
           <input
             className={styles.input}
             type="text"
